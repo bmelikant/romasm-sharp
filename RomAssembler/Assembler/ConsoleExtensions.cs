@@ -1,7 +1,4 @@
-using System.Text;
-using Assembler;
-
-namespace SystemConsoleExtensions;
+namespace Assembler;
 
 static class ConsoleExtensions {
 

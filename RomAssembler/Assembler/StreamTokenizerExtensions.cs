@@ -5,7 +5,6 @@ namespace Assembler;
 static class StreamTokenizerExtensions {
 
     private static readonly char[] tokenSeparators = { ' ', '\t' };
-    private static readonly char[] newline = { '\n' };
 
     private static bool MatchIn(this char c, char[] arr) {
         foreach (char ch in arr) if (c == ch) return true;
@@ -19,8 +18,14 @@ static class StreamTokenizerExtensions {
         while (!c.MatchIn(tokenSeparators)) {
             // if we are at the end of the line and there's nothing in the buffer, return the newline
             // otherwise return the buffer
-            if (c.MatchIn(newline)) {
+            if (c == '\n') {
                 if (tokenBuilder.Length == 0) tokenBuilder.Append((char) textReader.Read());
+                break;
+            } else if (c == '\r') {
+                if (tokenBuilder.Length == 0) {
+                    textReader.Read();
+                    tokenBuilder.Append((char) textReader.Read());
+                }
                 break;
             }
 

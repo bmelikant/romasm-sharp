@@ -1,34 +1,11 @@
 ﻿using Assembler;
-using StringTokenizerExtensions;
-using SystemConsoleExtensions;
 
 // See https://aka.ms/new-console-template for more information
 Console.WriteLine("-------------------");
 Console.WriteLine("ROM Assembler 0.0.1");
 Console.WriteLine("-------------------");
 
-Console.In.NextToken().Expect(".rom",
-    state => { Console.In.NextToken().Expect("\n", 
-        state => { 
-            state.IncrementLine();
-            bool cont = true;
-
-            while (cont) {
-                Console.In.NextToken().PrintToken()
-                    .TryMatch(s => s == ".params", state => {  })
-                    .TryNextMatch(s => s == ".fetch", state => { })
-                    .TryNextMatch(s => s == ".endrom", state => {
-                        cont = false;
-                        ConsoleExtensions.OutputString("assembly finished", state.GetCurrentLine());
-                    }).Expect("\n", state => { state.IncrementLine(); }, 
-                        (token, state) => { ConsoleExtensions.OutputError("unrecognized token", state.GetCurrentLine()); 
-                    });
-            }
-        },
-        (token, state) => { ConsoleExtensions.OutputFatal($"end of line expected, found {token}", state.GetCurrentLine()); });
-    },
-    (token, state) => { ConsoleExtensions.OutputFatal($"token '.rom' expected, found {token}", state.GetCurrentLine()); }
-);
+AssemblerMain.RunAssembler();
 
 /*
 string currentLine = ConsoleExtensions.ReadConsoleString();

@@ -8,6 +8,8 @@ class AssemblerStateProvider {
 
 class AssemblerState {
 
+    private static readonly Dictionary<string, int> bitPositions = new Dictionary<string, int>();
+
     private int _lineNumber = 0;
     private bool _error = false;
 
@@ -15,8 +17,10 @@ class AssemblerState {
     /// Increment the current line number from the assembler
     /// </summary>
     public AssemblerState IncrementLine() { _lineNumber++; return this; }
-    public int GetCurrentLine() => _lineNumber;
 
+    public AssemblerState StoreBitPosition(string label, int position = -1) { bitPositions[label] = position; return this; }
 
     public AssemblerState SetErrorState() { _error = true; return this; }
+
+    public int GetCurrentLine() => _lineNumber;
 }

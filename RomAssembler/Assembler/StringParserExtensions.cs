@@ -21,7 +21,7 @@ static class StringParserExtensions {
     public static (bool, string) TryMatch(this string token, Func<string, bool> predicate, Action<AssemblerState> success) {
         if (predicate(token)) {
             success(AssemblerStateProvider.GetAssemblerState());
-            return (true, token);
+            return (true, string.Empty);
         }
 
         return (false, token);
@@ -34,5 +34,11 @@ static class StringParserExtensions {
         }
 
         return result.Item2.TryMatch(predicate, success);
+    }
+
+    public static (bool, string) AcceptAny(this string token, Action<string, AssemblerState> fn) {
+        // this literally always returns accepted result and calls the function
+        fn(token, AssemblerStateProvider.GetAssemblerState());
+        return (true, string.Empty);
     }
 }
