@@ -23,4 +23,22 @@ class AssemblerState {
     public AssemblerState SetErrorState() { _error = true; return this; }
 
     public int GetCurrentLine() => _lineNumber;
+
+    public void DumpState() {
+        Console.WriteLine("----------------------------------");
+        Console.WriteLine("--- ROM Assembler - Dump State ---");
+        Console.WriteLine("----------------------------------");
+
+        Console.WriteLine("---------------------");
+        Console.WriteLine("--- Bit Positions ---");
+        Console.WriteLine("---------------------");
+
+        foreach (var key in bitPositions.Keys) {
+            Console.WriteLine($"Label: {key}, Position: {bitPositions[key]}");
+        }
+
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine("--- Finised dumping state ---");
+        Console.WriteLine("-----------------------------");
+    }
 }

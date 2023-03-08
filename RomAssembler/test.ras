@@ -1,12 +1,24 @@
 .rom
 
 .bits
-	.bitpos PCC 0
-	.bitpos PCE 1
+	.bitpos PC_CNT 0
+	.bitpos ENABLE_PC 1
+	.bitpos MAR_IN 2
+	.bitpos MEM_IN 3
+	.bitpos MEM_OUT 4
+	.bitpos IREG_IN 5
+	.bitpos REG_A_IN 6
+	.bitpos REG_A_OUT 7
+	.bitpos REG_B_IN 8
+	.bitpos REG_B_OUT 9
+	.bitpos SUM_OUT 10
+	.bitpos SUBTRACT 11
+	.bitpos STACK_PTR_IN 12
+	.bitpos STACK_PTR_OUT 13
+	.bitpos STACK_PTR_CNT 14
+	.bitpos POP 15
 .end-bits
 
-test token
-other test token
-Hello, world!
+
 
 .endrom

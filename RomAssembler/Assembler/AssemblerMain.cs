@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace Assembler;
 
 public static class AssemblerMain {
@@ -16,7 +18,10 @@ public static class AssemblerMain {
 
 		while (cont) {
 			Console.In.NextToken().PrintToken()
-				.TryMatch(s => s == ".params", state => {  })
+				.TryMatch(s => s == ".params", state => {
+					Console.In.NextToken().Expect("\n", state => {},
+					(token, state) => ConsoleExtensions.OutputFatal($"end of line expected, found {token}", state.GetCurrentLine()));
+				})
 				.TryNextMatch(s => s == ".bits", state => {
 					Console.In.NextToken().Expect("\n",
 					BitPositionLoop,
@@ -43,16 +48,30 @@ public static class AssemblerMain {
 				.TryNextMatch(s => s == ".end-bits", state => {
 					cont = false;
 					ConsoleExtensions.OutputString("finished reading bit positions");
-				}).Expect("\n", 
+				}).Expect("\n",
 					state => state.IncrementLine(), 
 					(token, state) => ConsoleExtensions.OutputError($"expected newline, found {token}", state.GetCurrentLine())
 				);
 		}
 	}
 
+	private static readonly string decimalNumberRegex = "^[0-9]+\\b";
 	static void ReadBitPosition(AssemblerState state) {
-		Console.In.NextToken().AcceptAny((token, state) => {
-			state.StoreBitPosition(token);
-		});
+		Console.In.NextToken()
+			.PrintToken()
+			.AcceptAny((token, state) => {
+				var label = token;
+				state.StoreBitPosition(label);
+				
+				Console.In.NextToken().PrintToken()
+					.TryMatch(s => {
+						Console.WriteLine($"token {s}, regex {decimalNumberRegex}");
+						return Regex.IsMatch(s, decimalNumberRegex);
+					},
+					(token, state) => {
+						var position = int.Parse(token);
+						state.StoreBitPosition(label, position);
+					});
+			});
 	}
 }

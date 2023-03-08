@@ -27,6 +27,15 @@ static class StringParserExtensions {
         return (false, token);
     }
 
+    public static (bool, string) TryMatch(this string token, Func<string, bool> predicate, Action<string, AssemblerState> success) {
+        if (predicate(token)) {
+            success(token, AssemblerStateProvider.GetAssemblerState());
+            return (true, string.Empty);
+        }
+
+        return (false, token);
+    }
+
     public static (bool, string) TryNextMatch(this (bool, string) result, Func<string, bool> predicate, Action<AssemblerState> success) {
         // if the previous result was a match, pass over this method
         if (result.Item1 && result.Item2 == string.Empty) {

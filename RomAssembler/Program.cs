@@ -7,6 +7,8 @@ Console.WriteLine("-------------------");
 
 AssemblerMain.RunAssembler();
 
+AssemblerStateProvider.GetAssemblerState().DumpState();
+
 /*
 string currentLine = ConsoleExtensions.ReadConsoleString();
 currentLine.NextToken().Expect(".rom", 

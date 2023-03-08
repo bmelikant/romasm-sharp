@@ -15,6 +15,13 @@ static class StreamTokenizerExtensions {
         var tokenBuilder = new StringBuilder();
         char c = (char) textReader.Peek();
 
+        if (c.MatchIn(tokenSeparators)) {
+            while (c.MatchIn(tokenSeparators)) {
+                textReader.Read();
+                c = (char) textReader.Peek();
+            }
+        }
+
         while (!c.MatchIn(tokenSeparators)) {
             // if we are at the end of the line and there's nothing in the buffer, return the newline
             // otherwise return the buffer
